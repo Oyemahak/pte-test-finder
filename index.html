@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTE Test Selector</title>
+    <style>
+        body {
+            font-family: "Open Sans", sans-serif;
+            margin: 20px;
+            background: #f4f7f9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            display: block;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .result-container {
+            display: none;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 30px;
+            text-align: center;
+            border-left: 6px solid #007bff;
+        }
+
+        .result-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #155724;
+            margin-bottom: 12px;
+        }
+
+        .result-subtitle {
+            font-size: 18px;
+            font-weight: 500;
+            color: #007bff;
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .enroll-btn {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            display: block;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .enroll-btn:hover {
+            background: #0056b3;
+        }
+
+        .reset-btn {
+            background: none;
+            color: #d9534f;
+            border: 2px solid #d9534f;
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            display: none;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: #d9534f;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+        .reset-btn:focus {
+            outline: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+        }
+
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: #ddd;
+            margin: 25px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <label for="country">My destination country is:</label>
+    <select id="country">
+        <option value="">Please select a country</option>
+        <option value="Canada">Canada</option>
+        <option value="US">United States</option>
+    </select>
+
+    <label for="goal">And my goal is:</label>
+    <select id="goal">
+        <option value="">Please select a goal</option>
+        <option value="Work">Work</option>
+        <option value="Studies">Studies</option>
+        <option value="Settle" class="canada-only">Settle</option>
+        <option value="JoinFamily" class="canada-only">Join Family</option>
+    </select>
+
+    <div id="pte-result" class="result-container"></div>
+
+    <button id="reset" class="reset-btn">Reset</button>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const countryDropdown = document.getElementById("country");
+        const goalDropdown = document.getElementById("goal");
+        const resultDiv = document.getElementById("pte-result");
+        const resetBtn = document.getElementById("reset");
+        const canadaOnlyOptions = document.querySelectorAll(".canada-only");
+
+        function updateGoalOptions() {
+            const country = countryDropdown.value;
+
+            // Hide "Settle" and "Join Family" for United States
+            if (country === "US") {
+                canadaOnlyOptions.forEach(option => option.style.display = "none");
+            } else {
+                canadaOnlyOptions.forEach(option => option.style.display = "block");
+            }
+        }
+
+        function showResult() {
+            const country = countryDropdown.value;
+            const goal = goalDropdown.value;
+
+            if (!country || !goal) {
+                alert("Please select both country and goal.");
+                return;
+            }
+
+            let resultText = `<div class="result-subtitle">There is 1 test option</div>`;
+
+            if (country === "Canada" && goal === "Studies") {
+                resultText += `<div class="separator"></div><div class="result-title">PTE Academic</div><div class="result-text">Accepted by 98% of universities and colleges in Canada.</div>`;
+            } else if (country === "Canada" && (goal === "Work" || goal === "Settle" || goal === "JoinFamily")) {
+                resultText += `<div class="separator"></div><div class="result-title">PTE Core</div><div class="result-text">Accepted by Immigration, Refugees and Citizenship Canada (IRCC) for work visas.</div>`;
+            } else if (country === "US" && goal === "Studies") {
+                resultText += `<div class="separator"></div><div class="result-title">PTE Academic</div><div class="result-text">Accepted by 98% of universities and colleges in the U.S.</div>`;
+            } else if (country === "US" && goal === "Work") {
+                resultText += `<div class="separator"></div><div class="result-title">PTE Core</div><div class="result-text">Accepted for work visas in the United States.</div>`;
+            } else {
+                resultDiv.style.display = "none";
+                return;
+            }
+
+            resultText += `<div class="separator"></div><a href="https://registration.ca.powerschool.com/family/gosnap.aspx?action=100000869&culture=en" class="enroll-btn" target="_blank">Enroll for PTE Coaching!</a>`;
+
+            resultDiv.innerHTML = resultText;
+            resultDiv.style.display = "block";
+            resetBtn.style.display = "block";
+        }
+
+        function resetForm() {
+            countryDropdown.value = "";
+            goalDropdown.value = "";
+            resultDiv.style.display = "none";
+            resetBtn.style.display = "none";
+            updateGoalOptions();
+        }
+
+        countryDropdown.addEventListener("change", updateGoalOptions);
+        goalDropdown.addEventListener("change", showResult);
+        resetBtn.addEventListener("click", resetForm);
+    });
+</script>
+
+</body>
+</html>
